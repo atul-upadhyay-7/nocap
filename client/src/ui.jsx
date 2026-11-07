@@ -20,9 +20,29 @@ export function Reveal({children,delay=0,className}){
  return <div className={cn('reveal',className)} style={{'--reveal-delay':delay+'ms'}}>{children}</div>;
 }
 
-export function SplitText({text,as:Tag='span',className,wordDelay=70,startDelay=0}){
+export function SplitText({text,as:Tag='span',className,wordDelay=70,startDelay=0,highlight=[]}){
  return <Tag className={className} aria-label={text}>{text.split(' ').map((w,i)=>
-  <span key={i} aria-hidden="true" className="split-word" style={{'--split-delay':(startDelay+i*wordDelay)+'ms'}}>{w}{i<text.split(' ').length-1?'\u00A0':''}</span>)}</Tag>;
+  <span key={i} aria-hidden="true" className={'split-word'+(highlight.includes(w)?' grad-text':'')} style={{'--split-delay':(startDelay+i*wordDelay)+'ms'}}>{w}{i<text.split(' ').length-1?'\u00A0':''}</span>)}</Tag>;
+}
+
+// Cursor spotlight for glass panels (hover.dev / Kokonut UI pattern, hand-built):
+// a soft ember glow follows the pointer across any .panel via --mx/--my.
+// Disabled under prefers-reduced-motion (the CSS hides the glow there too).
+export function Spotlight(){
+ useEffect(()=>{
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  function onMove(e){
+   const t=e.target;
+   const el=t&&t.closest?t.closest('.panel'):null;
+   if(!el)return;
+   const r=el.getBoundingClientRect();
+   el.style.setProperty('--mx',(e.clientX-r.left)+'px');
+   el.style.setProperty('--my',(e.clientY-r.top)+'px');
+  }
+  window.addEventListener('mousemove',onMove,{passive:true});
+  return ()=>window.removeEventListener('mousemove',onMove);
+ },[]);
+ return null;
 }
 
 // Deterministic particle layout so a re-render never reshuffles the field.

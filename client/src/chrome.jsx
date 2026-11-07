@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useEffect,useRef} from 'react';
 import {NavLink,useLocation} from 'react-router-dom';
 import {Home,FileText,ClipboardCheck,CreditCard,ReceiptText,Check} from 'lucide-react';
 import {useScopePay} from './state.jsx';
@@ -29,9 +29,40 @@ export function Topbar(){
  </header>;
 }
 
+// macOS-style dock magnification (Skiper / Cult UI pattern, hand-built):
+// icons scale with pointer proximity along the dock's vertical axis.
+// Desktop only; skipped entirely under prefers-reduced-motion.
+function useDockMagnification(){
+ const ref=useRef(null);
+ useEffect(()=>{
+  const dock=ref.current;if(!dock)return;
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+   dock.classList.add('mag-off');return;
+  }
+  const mq=window.matchMedia('(max-width: 720px)');
+  if(mq.matches){dock.classList.add('mag-off');return;}
+  const RANGE=95,MAX=1.4;
+  function move(e){
+   const links=dock.querySelectorAll('a');
+   for(const a of links){
+    const r=a.getBoundingClientRect();
+    const d=Math.abs(e.clientY-(r.top+r.height/2));
+    const t=Math.max(0,1-d/RANGE);
+    a.style.transform=t>0?`scale(${(1+(MAX-1)*t*t).toFixed(3)})`:'';
+   }
+  }
+  function leave(){dock.querySelectorAll('a').forEach(a=>{a.style.transform='';});}
+  dock.addEventListener('mousemove',move);
+  dock.addEventListener('mouseleave',leave);
+  return ()=>{dock.removeEventListener('mousemove',move);dock.removeEventListener('mouseleave',leave);};
+ },[]);
+ return ref;
+}
+
 export function Dock(){
  const {stepDone}=useScopePay();
- return <nav className="dock" aria-label="Sections">
+ const magRef=useDockMagnification();
+ return <nav className="dock" aria-label="Sections" ref={magRef}>
   {NAV.map(({to,label,icon:Icon,end})=>
    <NavLink key={to} to={to} end={end} title={label} aria-label={label}
     className={({isActive})=>isActive?'active':''}>

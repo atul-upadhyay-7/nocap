@@ -14,6 +14,10 @@ const KPIS=[
  {icon:FileSearch,value:100,decimals:0,suffix:'%',label:'Evidence verbatim from the brief'},
  {icon:ShieldCheck,value:0,decimals:0,label:'Approvals the AI can make'},
 ];
+const TICKER=[
+ 'Server-owned price','Evidence copied verbatim','You approve, never the AI',
+ 'PayPal sandbox only','Server-confirmed capture','Receipts you can verify','No live money path',
+];
 const LIMITS=[
  'Fixed price of USD 10.00, owned by the server. Nobody, including the AI, can change it.',
  'PayPal sandbox only. There is no live mode in the code.',
@@ -24,14 +28,19 @@ export default function Home(){
  return <>
   <Reveal className="border-b pb-9">
    <Eyebrow>Sandbox demo - no real money</Eyebrow>
-   <SplitText as="h1" text="Scope review before a single dollar moves." wordDelay={90} className="mt-3.5 block max-w-[640px] font-serif text-[clamp(34px,4.6vw,52px)] font-medium leading-[1.08] tracking-tight"/>
+   <SplitText as="h1" text="Scope review before a single dollar moves." wordDelay={90} highlight={['dollar']} className="mt-3.5 block max-w-[640px] font-serif text-[clamp(34px,4.6vw,52px)] font-medium leading-[1.08] tracking-tight"/>
    <p className="mt-4 max-w-[560px] text-[16.5px] leading-relaxed text-secondary-foreground">ScopePay turns a client brief into a reviewed scope draft, then collects one fixed sandbox payment through PayPal. The AI drafts. Only you approve.</p>
    <div className="mt-8 flex flex-wrap gap-2.5">
     <Button asChild className="group"><Link to="/brief">Start a brief<ArrowRight className="transition-transform duration-200 group-hover:translate-x-1"/></Link></Button>
     <Button asChild variant="outline"><Link to="/receipts">See receipts</Link></Button>
    </div>
   </Reveal>
-  <Reveal delay={140} className="kpis mt-9">
+  <div className="marquee mt-9" aria-hidden="true">
+   <div className="marquee-track">
+    {[...TICKER,...TICKER].map((t,i)=><span key={i} className="marquee-item"><i/>{t}</span>)}
+   </div>
+  </div>
+  <Reveal delay={140} className="kpis mt-7">
    {KPIS.map((k,i)=>
     <div key={i} className="kpi panel reveal" style={{'--reveal-delay':(140+i*90)+'ms'}}>
      <div className="kpi-top">

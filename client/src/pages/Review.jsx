@@ -49,7 +49,7 @@ export default function Review(){
      </ul></>}
    </CardContent>
   </Card></Reveal>
-  <Reveal delay={120}><Card className="card-lift mt-5">
+  <Reveal delay={120}><Card className="card-lift beam mt-5">
    <CardContent className="pt-6 sm:pt-8">
     <div className="flex items-start gap-3">
      <Checkbox id="ack" checked={checked} onCheckedChange={v=>setChecked(v===true)}/>
