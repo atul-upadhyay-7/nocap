@@ -93,7 +93,23 @@ export default function Receipts(){
   finally{setReplaying(false);}}
  useEffect(()=>{loadReceipts().then(setData).catch(e=>setError(e.message));},[]);
  if(error)return <Card><CardHeader><Eyebrow>Receipts</Eyebrow><CardTitle>Receipts unavailable</CardTitle><CardDescription>{error}</CardDescription></CardHeader></Card>;
- if(!data)return <Card><CardHeader><Eyebrow>Receipts</Eyebrow><CardTitle>Loading...</CardTitle></CardHeader></Card>;
+ if(!data)return <>
+  <Reveal><Eyebrow>Your session's record</Eyebrow>
+  <h2 className="mt-3 font-serif text-2xl font-semibold tracking-tight">Receipts</h2></Reveal>
+  <div className="panel mt-5 p-6 sm:p-8" aria-label="Loading receipts">
+   <div className="skel" style={{height:34,width:220}}/>
+   <div className="mt-6 space-y-4">
+    {[0,1,2].map(i=><div key={i} className="flex items-center gap-4">
+     <div className="skel" style={{height:40,width:40,borderRadius:12}}/>
+     <div className="flex-1 space-y-2">
+      <div className="skel" style={{height:13,width:(62-i*14)+'%'}}/>
+      <div className="skel" style={{height:11,width:(38-i*6)+'%'}}/>
+     </div>
+     <div className="skel" style={{height:22,width:64,borderRadius:999}}/>
+    </div>)}
+   </div>
+  </div>
+ </>;
  return <>
   <Reveal><Eyebrow>Your session's record</Eyebrow>
   <h2 className="mt-3 font-serif text-2xl font-semibold tracking-tight">Receipts</h2></Reveal>

@@ -1,7 +1,7 @@
 import React,{useState} from 'react';
 import {Link} from 'react-router-dom';
 import {useScopePay} from '../state.jsx';
-import {Eyebrow,Reveal,CountUp} from '../ui.jsx';
+import {Eyebrow,Reveal,CountUp,HoldButton} from '../ui.jsx';
 import {CheckCircle2} from 'lucide-react';
 import {Button} from '@/components/ui/button';
 import {Card,CardContent,CardDescription,CardHeader,CardTitle} from '@/components/ui/card';
@@ -24,7 +24,7 @@ export default function Payment(){
   <CardDescription>Every sandbox order needs your saved review. No review, no payment button. <Link className="link-underline font-semibold text-ember-deep" to="/review">Go to review</Link></CardDescription>
  </CardHeader></Card></Reveal>;
  return <>
-  <Reveal><Card>
+  <Reveal><Card className="glow-border">
    <CardHeader className="relative">
     <Eyebrow>Step 3 - sandbox payment</Eyebrow>
     <CardTitle>One fixed test item</CardTitle>
@@ -43,7 +43,10 @@ export default function Payment(){
        <span className="success-ring mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-ember text-primary-foreground"><CheckCircle2 size={13} strokeWidth={3}/></span>
        <p className="font-semibold text-ember-deep">Sandbox payment completed. Capture <span className="font-mono text-[13px]">{paid.captureId}</span>. See it on the Receipts page.</p>
       </div>
-      :<Button disabled={!ready} onClick={checkout}>{setupIssue?'Sandbox setup needed':checkoutClosed?'Checkout closed - reload to start again':ready?'Pay with PayPal (sandbox)':'Preparing sandbox checkout...'}</Button>}
+      :<HoldButton disabled={!ready} onFire={checkout}
+        hint={ready?'Press and hold for one second to open PayPal sandbox checkout.':undefined}>
+        {setupIssue?'Sandbox setup needed':checkoutClosed?'Checkout closed - reload to start again':ready?'Hold to pay with PayPal (sandbox)':'Preparing sandbox checkout...'}
+       </HoldButton>}
      {message&&<p className="mt-4 text-[13px] text-muted-foreground [overflow-wrap:anywhere]">{message}</p>}
     </div>
    </CardContent>

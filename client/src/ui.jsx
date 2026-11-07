@@ -1,5 +1,5 @@
-import React,{useEffect,useMemo,useRef} from 'react';
-import {Check} from 'lucide-react';
+import React,{useEffect,useMemo,useRef,useState} from 'react';
+import {Check,Lock} from 'lucide-react';
 import {cn} from '@/lib/utils';
 const STEPS=[['brief','Brief'],['draft','Draft'],['review','Review'],['paid','Payment']];
 export function Stepper({done}){
@@ -34,7 +34,7 @@ function makeParticles(n){
 }
 export function Ambient(){
  const particles=useMemo(()=>makeParticles(22),[]);
- return <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+ return <div aria-hidden="true" className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
   <div className="ambient-aurora"/>
   <div className="ambient-glow ambient-glow-a"/>
   <div className="ambient-glow ambient-glow-b"/>
@@ -56,4 +56,37 @@ export function CountUp({value,decimals=0,duration=950,className}){
   return ()=>cancelAnimationFrame(raf);
  },[value,decimals,duration]);
  return <span ref={ref} className={className}>{value.toFixed(decimals)}</span>;
+}
+
+// Hold-to-confirm button (hover.dev Hold To Confirm, built by hand): press and
+// hold ~1s to fire; releasing early cancels. The fill sweeps left to right.
+export function HoldButton({onFire,disabled,holdMs=1000,children,hint,className}){
+ const [pct,setPct]=useState(0);
+ const raf=useRef(null),start=useRef(0),fired=useRef(false);
+ function cancel(){if(raf.current)cancelAnimationFrame(raf.current);raf.current=null;setPct(0);}
+ function tick(t){
+  const p=Math.min(1,(t-start.current)/holdMs);
+  setPct(p);
+  if(p>=1){raf.current=null;if(!fired.current){fired.current=true;setPct(0);onFire();}return;}
+  raf.current=requestAnimationFrame(tick);
+ }
+ function down(e){
+  if(disabled||fired.current)return;
+  e.preventDefault();
+  start.current=performance.now();
+  if(raf.current)cancelAnimationFrame(raf.current);
+  raf.current=requestAnimationFrame(tick);
+ }
+ useEffect(()=>()=>{if(raf.current)cancelAnimationFrame(raf.current);},[]);
+ useEffect(()=>{if(!disabled)fired.current=false;},[disabled]);
+ return <>
+  <button type="button" className={'hold-btn btn-shine'+(className?' '+className:'')} disabled={disabled}
+   style={{'--hold':pct}}
+   onPointerDown={down} onPointerUp={cancel} onPointerLeave={cancel} onPointerCancel={cancel}
+   onContextMenu={e=>e.preventDefault()}>
+   <span className="hold-ring"><Lock size={11} strokeWidth={3}/></span>
+   {children}
+  </button>
+  {hint&&<span className="hold-hint">{hint}</span>}
+ </>;
 }

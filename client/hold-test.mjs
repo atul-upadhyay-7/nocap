@@ -1,0 +1,31 @@
+import { chromium } from 'playwright';
+const base = 'http://localhost:4517';
+const H = {'Content-Type':'application/json'};
+const draft = {scopeId:'9908358d-3f92-4fd1-a476-2df6fd720982',summary:'fixture',deliverables:[{description:'d',evidence:'e'}],questions:[],conflicts:[]};
+const MOCK_SDK = `window.paypal={createInstance:async()=>({findEligibleMethods:async()=>({isEligible:()=>true}),createPayPalOneTimePaymentSession:async(h)=>({start:async()=>{setTimeout(()=>h.onCancel(),300);}})})};`;
+const browser = await chromium.launch({channel:'chrome'});
+const page = await (await browser.newContext({viewport:{width:1440,height:900}})).newPage();
+await page.route('**/api/**', r => r.fulfill({status:200, headers:H, body:'{}'}));
+await page.route('**/api/scopes/*/review', r => r.fulfill({status:200, headers:H, body:JSON.stringify({scopeId:draft.scopeId})}));
+await page.route('**/api/scopes/extract', r => r.fulfill({status:200, headers:H, body:JSON.stringify(draft)}));
+await page.route('**/api/config', r => r.fulfill({status:200, headers:H, body:JSON.stringify({clientId:'mock-labelled-fixture', sku:'sandbox-demo'})}));
+await page.route('**/web-sdk/v6/core**', r => r.fulfill({status:200, headers:{'Content-Type':'application/javascript'}, body:MOCK_SDK}));
+await page.route('**/api/orders', r => r.fulfill({status:200, headers:H, body:JSON.stringify({orderId:'MOCK', status:'CREATED'})}));
+await page.goto(base+'/brief', {waitUntil:'networkidle'});
+await page.getByRole('button', {name:'Extract a draft'}).click();
+await page.getByRole('checkbox').click();
+await page.getByRole('button', {name:'Save my review'}).click();
+const btn = page.getByRole('button', {name:/Hold to pay/});
+await btn.waitFor();
+// short tap: should NOT fire
+await btn.dispatchEvent('pointerdown'); await page.waitForTimeout(250); await btn.dispatchEvent('pointerup');
+await page.waitForTimeout(600);
+const afterTap = await page.locator('text=Checkout cancelled').count();
+// full hold: should fire (mock cancels after 300ms -> cancel message)
+const box = await btn.boundingBox();
+await page.mouse.move(box.x+box.width/2, box.y+box.height/2);
+await page.mouse.down(); await page.waitForTimeout(1300); await page.mouse.up();
+await page.waitForTimeout(900);
+const afterHold = await page.locator('text=Checkout cancelled').count();
+console.log('tap fired?', afterTap>0, '| hold fired?', afterHold>0);
+await browser.close();
