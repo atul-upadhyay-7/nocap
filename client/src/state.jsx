@@ -1,5 +1,7 @@
 import React,{createContext,useContext,useEffect,useRef,useState} from 'react';
-export const EXAMPLE='Build a three-page portfolio website: Home, Projects and Contact. Include a contact form. Do not include visitor login. Deliver responsive layouts. Deadline is not agreed yet.';
+// Matches the backend fixture brief exactly, so Extract works when the server runs in
+// fixture mode (no AI key configured); a live AI accepts any brief, including this one.
+export const EXAMPLE='Demo brief (synthetic example): build a two-page website for a bakery with a menu page listing all cakes and breads and a contact page with a working contact form. No online ordering.';
 const ScopePayContext=createContext(null);
 export function ScopePayProvider({children}){
  const [config,setConfig]=useState(null),[brief,setBrief]=useState(EXAMPLE),[draft,setDraft]=useState(null),[review,setReview]=useState(null),[checked,setChecked]=useState(false),[busy,setBusy]=useState(false),[aiMessage,setAiMessage]=useState(''),[message,setMessage]=useState('Checking sandbox setup...'),[ready,setReady]=useState(false),[paid,setPaid]=useState(null);

@@ -326,9 +326,11 @@
  }
  @media (max-width:860px){
   .shell{padding:12px 16px 108px}
-  .topbar{padding:0 4px;flex-wrap:wrap;row-gap:10px}
-  .topbar .pillnav{order:3;flex:1 1 100%;justify-content:flex-start;overflow-x:auto;scrollbar-width:none}
-  .topbar .pillnav::-webkit-scrollbar{display:none}
+  /* Phone bar: solid, edge-to-edge; page text must never show through while scrolling.
+     The pill nav is hidden here - the bottom dock covers the same five destinations,
+     and five pills cannot fit 320-430px without clipping or scrolling. */
+  .topbar{top:0;padding:12px 16px;background:var(--background);border-bottom:1px solid var(--stroke)}
+  .topbar .pillnav{display:none}
   .brand .brand-name{font-size:17px}
   .dock{
    left:50%;top:auto;bottom:14px;transform:translateX(-50%);
@@ -342,6 +344,12 @@
   .skel{animation:none}
   .btn-shine::after{display:none}
  }
+}
+
+/* Short viewports (phone keyboard open, landscape): the fixed dock would sit on top of
+   the focused input. Desktop keeps the top pill nav, so hiding the dock is safe there too. */
+@media (max-height:520px){
+ .dock{display:none}
 }
 
 /* Dialog glass: nearly opaque so content behind never bleeds through. */
