@@ -1,6 +1,6 @@
 # Architecture and trust boundaries
 
-NoCap is a single-user local demo. It uses real AI inference and PayPal sandbox payments, but has no production authentication or public deployment configuration.
+NoCap is a single-user sandbox demo. It uses real AI inference and PayPal sandbox payments, but has no production authentication. It also runs as a hosted sandbox instance (free Render tier, disposable database) with the same guards; it is not a secured public service.
 
 ## Data flow
 
@@ -37,7 +37,7 @@ Synthetic brief              AI draft                  Review                 Sa
 - `backend/.../paypal/`: `PayPalClient` - sandbox token, order create/capture with idempotency identifiers, webhook signature verification.
 - `backend/.../store/`: JPA entities and repositories for drafts and orders; `OrderStates` (state machine), `LedgerService` (double-entry), `OutboxService` (transactional outbox).
 - `backend/src/main/resources/db/migration/`: Flyway V1 (drafts/orders) and V2 (ledger/outbox).
-- `backend/src/test/`: 75 JUnit tests with stubbed PayPal/AI; `DemoMain` is a test-only local runner (H2 + scripted providers) used for screenshots.
+- `backend/src/test/`: 167 JUnit tests with stubbed PayPal/AI; `DemoMain` is a test-only local runner (H2 + scripted providers) used for screenshots.
 
 ## What crosses each boundary
 
@@ -53,4 +53,4 @@ Only synthetic content is permitted. The configuration flag is an operator polic
 
 Real user accounts, production auth, durable global rate limits, TLS, escrow, refunds/payouts, legal acceptance, negotiated pricing, production payments and public hosting. Uncertain payment outcomes require manual seller-side inspection, not blind retries.
 
-See LOCAL_RUN.md for setup and VERIFICATION.md for bounded test evidence. The local demo must not be internet-exposed as a substitute for a secured hosted judge build.
+See LOCAL_RUN.md for setup and VERIFICATION.md for bounded test evidence. The hosted instance at https://nocap-app-9dzx.onrender.com is the same build with the same guards (sandbox payments only, synthetic content only, labelled fixture AI until a Groq key is set); it remains a demo, not a secured production deployment.

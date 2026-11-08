@@ -14,7 +14,7 @@ export default function Layout(){
   <Dock/>
   <main className="shell">
    <div key={pathname} className="page-enter"><Outlet/></div>
-   <footer className="foot panel-soft">Local demo only. Not escrow, a legal contract or a production payment service. AI never sets prices or authorizes payment.</footer>
+   <footer className="foot panel-soft">Sandbox demo only. Not escrow, a legal contract or a production payment service. AI never sets prices or authorizes payment.</footer>
   </main>
  </div>;
 }

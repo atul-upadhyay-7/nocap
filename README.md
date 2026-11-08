@@ -4,7 +4,11 @@ A private PayPal AI hackathon prototype: turn a synthetic project brief into an 
 
 Stack: **Spring Boot 3.3 (Java 21) + PostgreSQL** backend, **React + Vite + shadcn/ui (Tailwind v4)** frontend.
 
-## What works in the local build
+## Hosted sandbox demo
+
+The app runs at **https://nocap-app-9dzx.onrender.com** (free Render hosting; the first visit after ~15 idle minutes can take up to a minute while the service wakes). It is the same build as this repository, configured for review: PayPal **sandbox** only (no real money can move), synthetic briefs only, and the AI extraction running as the labelled fixture replay until a Groq key is configured. The database is a free instance that expires on December 8, 2026; the demo is disposable by design.
+
+## What works in the build
 
 - Multi-page React interface (shadcn/ui): synthetic brief, draft summary, deliverables with exact source evidence, questions and conflicts, review, payment, receipts.
 - Server-side extraction validation with clear disabled, timeout, refusal and invalid-output errors. No canned output masquerading as AI.
@@ -24,13 +28,13 @@ Stack: **Spring Boot 3.3 (Java 21) + PostgreSQL** backend, **React + Vite + shad
 - **Demo tools (local only, `DEMO_TOOLS=true`)**: webhook simulator through the real verification path, and failure-injection toggles (unclear capture, wrong amount, create outage) that drive the server's real fail-closed handling.
 - **Resilience4j retry + circuit breaker on every PayPal call**: transient faults (5xx, 429, network) retry up to 3 times with exponential backoff; 4xx business errors never retry; the breaker opens at 60% failures and fails fast. Nothing about failure handling is silently swallowed.
 - **Scheduled reconciler**: re-reads every `PENDING_REVIEW` order from PayPal each minute and completes it only when PayPal's own record proves a completed capture of exactly USD 10.00; any disagreement fails closed.
-- **Actuator + Micrometer + Prometheus**: `/actuator/health`, `/actuator/metrics` and a `/actuator/prometheus` scrape with business counters (orders placed/completed/pending_review, webhooks confirmed/rejected, relay, rate limit) - loopback only.
+- **Actuator + Micrometer + Prometheus**: `/actuator/health`, `/actuator/metrics` and a `/actuator/prometheus` scrape with business counters (orders placed/completed/pending_review, webhooks confirmed/rejected, relay, rate limit). Locally these bind to loopback only; on the hosted demo the management endpoints are kept off the public port.
 - **Structured JSON logs with correlation IDs**: every request gets an `X-Correlation-Id` (echoed in the response) that appears on every log line.
 - **OpenAPI + Swagger UI**: `/v3/api-docs` and `/swagger-ui/index.html` document the API.
 - **Optional Redis rate limit (`SCOPEPAY_RATELIMIT_ENABLED=true`)**: sliding-minute per-session limit on mutating routes, fail-open when Redis is down, webhooks exempt. Off by default.
 - **Optional Kafka outbox relay (`SCOPEPAY_KAFKA_RELAY_ENABLED=true`)**: publishes committed outbox events to the `scopepay.outbox` topic in order and marks `published_at`. Postgres stays the durable outbox; with the flag off the table is the whole contract. Off by default.
 
-This is a local prototype, not a production service, escrow product, legal agreement or automatic charging system. The review acknowledges a draft for a simulated demo only, including open questions. It does not settle a client's requirements or create an obligation. No real service is sold and no real money moves.
+This is a sandbox prototype, not a production service, escrow product, legal agreement or automatic charging system. The review acknowledges a draft for a simulated demo only, including open questions. It does not settle a client's requirements or create an obligation. No real service is sold and no real money moves.
 
 ## Why NoCap
 
@@ -86,20 +90,20 @@ Never commit a filled `.env`, put secrets in screenshots or paste them into chat
 
 [Verification record](docs/VERIFICATION.md) distinguishes automated proof, scripted stand-ins and checks still pending on the owner's machine.
 
-- 165 JUnit tests pass (API, safety invariants, ledger, outbox, state machine, webhooks, AI adapter, delivery-comparison and exclusion verdicts, client-complaint coverage, fixture replay, reconciler, resilience, rate limit, Kafka relay, observability, real-PostgreSQL schema guard); production client build passes.
+- 167 JUnit tests pass (API, safety invariants, ledger, outbox, state machine, webhooks, AI adapter, delivery-comparison and exclusion verdicts, client-complaint coverage, fixture replay, reconciler, resilience, rate limit, Kafka relay, observability, real-PostgreSQL schema guard); production client build passes.
 - Payment safety paths (idempotent create, fail-closed capture, amount check, state machine, ledger balance, webhook verify) are covered by tests with a stubbed PayPal.
 - Screenshots in this README were taken against a scripted PayPal stand-in (test-only runner); the identical server code runs against the real sandbox with the owner's credentials.
 - The earlier Node prototype's live sandbox flow (buyer approval, capture, independent seller receipt) was verified Oct 16, 2026; the Spring Boot rebuild re-verifies live on the owner's laptop before submission.
 
 ## Boundaries and remaining work
 
-Keep the repository PRIVATE. Do not expose the app publicly: it lacks real user accounts, production authentication, durable rate limiting, TLS, deployment access controls and live payment rails. A session token is a local demo capability, not a login. Uncertain payment outcomes need manual sandbox activity inspection; do not create replacement orders blindly.
+Keep the repository PRIVATE. The hosted instance above is a sandbox demo, not a public service: it has no real user accounts, no production authentication, no durable rate limiting, no deployment access controls and no live payment rails, and it accepts synthetic content only. A session token is a demo capability, not a login. Uncertain payment outcomes need manual sandbox activity inspection; do not create replacement orders blindly.
 
 Submission deadline is November 12, 2026 at 12:00 Pacific (November 13, 01:30 IST). Public release, the demo video and the Devpost submission are separate owner steps. MIT was selected by the owner on October 16, 2026. No hackathon entry has been submitted.
 
 ## Architecture
 
-See [architecture and trust boundaries](docs/ARCHITECTURE.md). The application remains a private local demo; release and submission are separate owner decisions.
+See [architecture and trust boundaries](docs/ARCHITECTURE.md). The application is a sandbox demo; public release of the repository and the hackathon submission are separate owner decisions.
 
 ## Official references
 
