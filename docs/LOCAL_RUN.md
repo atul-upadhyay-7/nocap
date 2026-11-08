@@ -1,4 +1,4 @@
-# Run ScopePay locally
+# Run NoCap locally
 
 A private, sandbox-only hackathon prototype. No real service is sold, no escrow exists, and the AI draft is not a contract or a price quote. Everything below uses free software only.
 

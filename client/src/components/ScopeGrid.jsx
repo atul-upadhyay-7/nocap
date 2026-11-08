@@ -4,7 +4,7 @@ import {AllCommunityModule, ModuleRegistry, themeQuartz} from 'ag-grid-community
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
-// Scoped to the ScopePay ember palette so the grid reads as part of the product,
+// Scoped to the NoCap ember palette so the grid reads as part of the product,
 // not a dropped-in widget.
 const scopeTheme = themeQuartz.withParams({
   backgroundColor: 'rgba(27,21,17,0.55)',

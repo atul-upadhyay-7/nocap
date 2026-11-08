@@ -1,4 +1,4 @@
-# ScopePay
+# NoCap
 
 A private PayPal AI hackathon prototype: turn a synthetic project brief into an evidence-linked scope draft, review it explicitly, then make a separate fixed-price sandbox payment. AI never prices work or approves payment.
 
@@ -32,11 +32,11 @@ Stack: **Spring Boot 3.3 (Java 21) + PostgreSQL** backend, **React + Vite + shad
 
 This is a local prototype, not a production service, escrow product, legal agreement or automatic charging system. The review acknowledges a draft for a simulated demo only, including open questions. It does not settle a client's requirements or create an obligation. No real service is sold and no real money moves.
 
-## Why ScopePay
+## Why NoCap
 
-Freelancers lose money twice: unclear scopes that drift into disputes, and awkward payment collection after the work. ScopePay explores one fix for that: an AI that turns a plain-English brief into a structured scope draft where every deliverable links to its exact source evidence, a required human review of that draft, and only then a separate, explicit PayPal payment step. The AI reads and organizes; it never sets the price and never approves a charge. The human stays the decision-maker end to end.
+Freelancers lose money twice: unclear scopes that drift into disputes, and awkward payment collection after the work. NoCap explores one fix for that: an AI that turns a plain-English brief into a structured scope draft where every deliverable links to its exact source evidence, a required human review of that draft, and only then a separate, explicit PayPal payment step. The AI reads and organizes; it never sets the price and never approves a charge. The human stays the decision-maker end to end.
 
-PayPal's own Seller Protection does not cover Significantly Not As Described (SNAD) claims - items the buyer says are not what was ordered - which is exactly the dispute type a freelancer faces when a client says work is missing. ScopePay targets that gap with evidence, not adjudication: a scope both sides reviewed, a delivery account quoted verbatim against it, and the client's complaint cited just as strictly, so a make-good decision rests on visible claims instead of memory. It never decides who is right.
+PayPal's own Seller Protection does not cover Significantly Not As Described (SNAD) claims - items the buyer says are not what was ordered - which is exactly the dispute type a freelancer faces when a client says work is missing. NoCap targets that gap with evidence, not adjudication: a scope both sides reviewed, a delivery account quoted verbatim against it, and the client's complaint cited just as strictly, so a make-good decision rests on visible claims instead of memory. It never decides who is right.
 
 ## Built with, and how each tool is used
 
@@ -56,7 +56,7 @@ PayPal's own Seller Protection does not cover Significantly Not As Described (SN
 
 | Desktop review flow | Mobile |
 | --- | --- |
-| ![ScopePay desktop review flow: synthetic brief, draft with source evidence, review checkbox](docs/screenshot-review-desktop.png) | ![ScopePay mobile review](docs/screenshot-review-mobile.png) |
+| ![NoCap desktop review flow: synthetic brief, draft with source evidence, review checkbox](docs/screenshot-review-desktop.png) | ![NoCap mobile review](docs/screenshot-review-mobile.png) |
 
 | Order timeline and ledger (desktop) | Order timeline (mobile) |
 | --- | --- |

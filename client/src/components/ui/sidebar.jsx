@@ -40,7 +40,7 @@ const Sidebar = React.forwardRef(({className,children,...props},ref)=>{
   return (
    <Dialog open={openMobile} onOpenChange={setOpenMobile}>
     <DialogContent className="fixed left-0 top-0 h-full w-[280px] max-w-[280px] translate-x-0 translate-y-0 rounded-none border-y-0 border-l-0 p-0 data-[state=open]:slide-in-from-left" aria-describedby={undefined}>
-     <DialogTitle className="sr-only">ScopePay navigation</DialogTitle>
+     <DialogTitle className="sr-only">NoCap navigation</DialogTitle>
      <div className="flex h-full w-full flex-col bg-sidebar-background">{children}</div>
     </DialogContent>
    </Dialog>);

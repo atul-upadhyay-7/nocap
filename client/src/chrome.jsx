@@ -15,9 +15,9 @@ const STEPS=[['brief','Brief'],['draft','Draft'],['review','Review'],['paid','Pa
 export function Topbar(){
  const location=useLocation();
  return <header className="topbar">
-  <NavLink to="/" className="brand" aria-label="ScopePay home">
-   <span className="brand-dot">S</span>
-   <span className="brand-name">ScopePay<span style={{color:'var(--ember)'}}>.</span></span>
+  <NavLink to="/" className="brand" aria-label="NoCap home">
+   <span className="brand-dot">N</span>
+   <span className="brand-name">NoCap<span style={{color:'var(--ember)'}}>.</span></span>
   </NavLink>
   <nav className="pillnav" aria-label="Pages">
    {NAV.map(({to,label,end})=>

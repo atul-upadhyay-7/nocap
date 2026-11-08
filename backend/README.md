@@ -1,4 +1,4 @@
-# ScopePay backend (Spring Boot)
+# NoCap backend (Spring Boot)
 
 Java 21, Spring Boot 3.3, Spring Data JPA, PostgreSQL with Flyway migrations. Sandbox only: there is no live PayPal mode in the code.
 

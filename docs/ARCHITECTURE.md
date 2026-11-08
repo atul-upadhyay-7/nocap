@@ -1,6 +1,6 @@
 # Architecture and trust boundaries
 
-ScopePay is a single-user local demo. It uses real AI inference and PayPal sandbox payments, but has no production authentication or public deployment configuration.
+NoCap is a single-user local demo. It uses real AI inference and PayPal sandbox payments, but has no production authentication or public deployment configuration.
 
 ## Data flow
 

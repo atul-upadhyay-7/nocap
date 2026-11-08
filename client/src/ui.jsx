@@ -224,10 +224,10 @@ export function IntroLoader(){
   const off=document.createElement('canvas');off.width=w;off.height=h;
   const octx=off.getContext('2d');
   octx.fillStyle='#fff';
-  const fs=Math.min(140,Math.max(56,w*0.17));
+  const fs=Math.min(150,Math.max(64,w*0.22));
   octx.font=`600 ${fs}px Georgia, 'Times New Roman', serif`;
   octx.textAlign='center';octx.textBaseline='middle';
-  octx.fillText('ScopePay.',w/2,h/2);
+  octx.fillText('NoCap.',w/2,h/2);
   const img=octx.getImageData(0,0,w,h).data;
   const targets=[];
   const gap=Math.max(5,Math.round(w/210));

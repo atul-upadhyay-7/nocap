@@ -157,7 +157,7 @@
 /* ================= Ember Glass (Nov 2026) =================
    Frosted panels over the ambient ember field, floating pill nav, left icon
    dock, KPI cards, staggered entrances. Reference system: the Genuine Review
-   glass dashboard he picked on 2026-11-06, retinted to ScopePay ember. */
+   glass dashboard he picked on 2026-11-06, retinted to NoCap ember. */
 @layer base{
  :root{
   --glass:linear-gradient(160deg,rgb(61 47 37 / .55),rgb(27 21 17 / .42));

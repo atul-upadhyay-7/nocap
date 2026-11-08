@@ -6,7 +6,7 @@ export function ScopePayProvider({children}){
  const [setupIssue,setSetupIssue]=useState(false),[checkoutClosed,setCheckoutClosed]=useState(false);
  // The demo identity persists across closed tabs and restarts (a lost tab used to orphan
  // that session's receipts). An in-flight tab session is adopted once, then kept in localStorage.
- const [session]=useState(()=>{let value=localStorage.getItem('scopepay-session')||sessionStorage.getItem('scopepay-session');if(!value)value=crypto.randomUUID();localStorage.setItem('scopepay-session',value);return value;});
+ const [session]=useState(()=>{let value=localStorage.getItem('nocap-session')||sessionStorage.getItem('nocap-session');if(!value)value=crypto.randomUUID();localStorage.setItem('nocap-session',value);return value;});
  const payment=useRef(null),working=useRef(false),key=useRef(null);
  async function api(path,body,extra={}){const r=await fetch(path,{method:'POST',headers:{'Content-Type':'application/json','x-demo-session':session,...extra},body:JSON.stringify(body)});const data=await r.json();if(!r.ok)throw new Error(data.error||'REQUEST_UNCONFIRMED');return data;}
  useEffect(()=>{let cancelled=false,script;(async()=>{
