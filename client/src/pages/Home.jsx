@@ -2,7 +2,7 @@ import React from 'react';
 import {Link} from 'react-router-dom';
 import {Button} from '@/components/ui/button';
 import {Separator} from '@/components/ui/separator';
-import {Eyebrow,Reveal,SplitText,CountUp} from '../ui.jsx';
+import {Eyebrow,Reveal,SplitText,CountUp,Magnetic,HeroParticles} from '../ui.jsx';
 import {ArrowRight,ShieldCheck,FileSearch,BadgeDollarSign} from 'lucide-react';
 const STEPS=[
  ['Paste a synthetic brief','A practice client brief, never real work. The AI drafts a scope with evidence copied word for word from your text.'],
@@ -26,13 +26,16 @@ const LIMITS=[
 ];
 export default function Home(){
  return <>
-  <Reveal className="border-b pb-9">
+  <Reveal className="relative border-b pb-9">
+   <HeroParticles/>
+   <div className="relative">
    <Eyebrow>Sandbox demo - no real money</Eyebrow>
    <SplitText as="h1" text="Scope review before a single dollar moves." wordDelay={90} highlight={['dollar']} className="mt-3.5 block max-w-[640px] font-serif text-[clamp(34px,4.6vw,52px)] font-medium leading-[1.08] tracking-tight"/>
    <p className="mt-4 max-w-[560px] text-[16.5px] leading-relaxed text-secondary-foreground">ScopePay turns a client brief into a reviewed scope draft, then collects one fixed sandbox payment through PayPal. The AI drafts. Only you approve.</p>
-   <div className="mt-8 flex flex-wrap gap-2.5">
-    <Button asChild className="group"><Link to="/brief">Start a brief<ArrowRight className="transition-transform duration-200 group-hover:translate-x-1"/></Link></Button>
+   <div className="mt-8 flex flex-wrap items-center gap-2.5">
+    <Magnetic><Button asChild className="group"><Link to="/brief">Start a brief<ArrowRight className="transition-transform duration-200 group-hover:translate-x-1"/></Link></Button></Magnetic>
     <Button asChild variant="outline"><Link to="/receipts">See receipts</Link></Button>
+   </div>
    </div>
   </Reveal>
   <div className="marquee mt-9" aria-hidden="true">

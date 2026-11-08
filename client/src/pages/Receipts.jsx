@@ -8,6 +8,7 @@ import {Dialog,DialogContent,DialogDescription,DialogHeader,DialogTitle} from '@
 import {Table,TableBody,TableCell,TableRow} from '@/components/ui/table';
 import {Textarea} from '@/components/ui/textarea';
 import {Label} from '@/components/ui/label';
+import {Check} from 'lucide-react';
 import ScopeGrid from '@/components/ScopeGrid.jsx';
 import {Tabs,TabsContent,TabsList,TabsTrigger} from '@/components/ui/tabs';
 const EVENT_LABELS={ORDER_CREATED:'Sandbox order created',ORDER_PENDING_REVIEW:'Capture unclear - held for review, never shown as paid',ORDER_COMPLETED:'Payment captured and verified server-side',WEBHOOK_CONFIRMED:'PayPal webhook verified and recorded',WEBHOOK_REJECTED:'A webhook failed verification and was ignored',WEBHOOK_IGNORED:'A verified webhook did not match any order',ORDER_REFUNDED:'Payment refunded in the sandbox, ledger reversed',ORDER_REFUND_FAILED:'Refund answer was unclear - the order stays completed and safe',ORDER_RECOVERED:'Order recovered into a later session with a one-time console code'};
@@ -195,8 +196,10 @@ export default function Receipts(){
       <span className="text-muted-foreground">Payment timeline</span>
       {(!selectedOrder.timeline||selectedOrder.timeline.length===0)?
        <p className="mt-1 text-muted-foreground">No server events recorded yet.</p>:
-       <ol className="mt-2 space-y-2 border-l-2 border-border pl-3">
+       <ol className="steps-flow">
+        <span className="packet" aria-hidden="true"/>
         {selectedOrder.timeline.map((e,i)=><li key={i} className="reveal" style={{'--reveal-delay':(i*80)+'ms'}}>
+         <span className="step-node" aria-hidden="true"><Check size={11} strokeWidth={3}/></span>
          <div className="font-medium">{EVENT_LABELS[e.type]||e.type}</div>
          <div className="font-mono text-xs text-muted-foreground">{new Date(e.at).toLocaleString()}</div>
          {e.type==='ORDER_COMPLETED'&&<div className="mt-0.5 font-mono text-xs text-muted-foreground">capture {e.payload.captureId} - {e.payload.amount} {e.payload.currency}</div>}

@@ -434,3 +434,93 @@
  .marquee-track{animation:none}
  .beam::before{animation:none;opacity:.4}
 }
+
+/* ============================================================
+   Wave 3 - more Bookmarks-doc items, hand-built:
+   #13 daisyUI Steps (connected order timeline), #18 Protocol
+   Explorer (packet traveling the timeline), #7 Animata (check
+   draw), #6 SmoothUI (sliding tab pill), #8 Eldora UI (click
+   ripple), #2 hover.dev (magnetic CTA), #4 Kokonut UI (pulse
+   badge dot), #16 WebGradients (gradient primary buttons).
+   ============================================================ */
+
+/* ---------- daisyUI-style connected steps (order timeline) ---------- */
+.steps-flow{list-style:none;margin:10px 0 0;padding:0;position:relative}
+.steps-flow li{position:relative;padding:0 0 18px 34px}
+.steps-flow li::before{
+ content:"";position:absolute;left:10px;top:24px;bottom:0;width:2px;
+ background:linear-gradient(rgb(255 106 47 / .55),rgb(255 106 47 / .18));
+}
+.steps-flow li:last-child::before{display:none}
+.steps-flow li:last-child{padding-bottom:2px}
+.step-node{
+ position:absolute;left:0;top:1px;width:22px;height:22px;border-radius:50%;
+ display:grid;place-items:center;
+ border:1.5px solid var(--ember);background:rgb(255 106 47 / .12);color:var(--ember);
+}
+.step-node svg{width:11px;height:11px}
+
+/* ---------- Animata check-draw (steps + dock progress dots) ---------- */
+.step-node svg path,.dock .step-dot.done svg path{
+ stroke-dasharray:24;stroke-dashoffset:24;animation:check-draw .45s ease-out forwards;
+}
+.dock .step-dot.done svg path{animation-delay:.1s}
+@keyframes check-draw{to{stroke-dashoffset:0}}
+
+/* ---------- Protocol Explorer packet on the timeline ---------- */
+.steps-flow .packet{
+ position:absolute;left:9px;top:0;width:4px;height:12px;border-radius:4px;
+ background:var(--ember);box-shadow:0 0 8px rgb(255 106 47 / .8);
+ opacity:0;animation:packet-run 1.6s ease-in-out .35s 1 forwards;pointer-events:none;
+}
+@keyframes packet-run{0%{top:0;opacity:0}12%{opacity:1}85%{opacity:1}100%{top:calc(100% - 16px);opacity:0}}
+
+/* ---------- SmoothUI sliding tab pill ---------- */
+.tabs-list{position:relative}
+.tabs-list [role=tab]{position:relative;z-index:1}
+.tab-glider{
+ position:absolute;top:4px;bottom:4px;left:0;width:var(--gl-w,0);
+ transform:translateX(var(--gl-x,0));border-radius:999px;
+ background:rgb(255 244 236 / .93);
+ transition:transform .28s cubic-bezier(.34,1.3,.4,1),width .28s cubic-bezier(.34,1.3,.4,1);
+ opacity:0;pointer-events:none;
+}
+.tabs-list.gl-ready .tab-glider{opacity:1}
+
+/* ---------- Eldora UI click ripple ---------- */
+.ripple-host{position:relative;overflow:hidden}
+.click-ripple{
+ position:absolute;border-radius:50%;pointer-events:none;
+ background:radial-gradient(circle,rgb(255 255 255 / .38) 0%,rgb(255 255 255 / .13) 45%,transparent 70%);
+ transform:scale(0);animation:ripple-go .6s ease-out forwards;
+}
+@keyframes ripple-go{to{transform:scale(1);opacity:0}}
+
+/* ---------- hover.dev magnetic CTA ---------- */
+.magnetic{display:inline-block;transition:transform .18s ease-out;will-change:transform}
+
+/* ---------- Kokonut UI pulse dot on the sandbox chip ---------- */
+.sandbox-chip::before{
+ content:"";width:6px;height:6px;border-radius:50%;background:var(--ember);margin-right:7px;flex:none;
+ box-shadow:0 0 0 0 rgb(255 106 47 / .55);animation:chip-pulse 2.2s ease-out infinite;
+}
+@keyframes chip-pulse{70%{box-shadow:0 0 0 7px rgb(255 106 47 / 0)}100%{box-shadow:0 0 0 0 rgb(255 106 47 / 0)}}
+
+/* ---------- WebGradients primary buttons ---------- */
+.btn-shine{background-image:linear-gradient(135deg,#ff8a4c 0%,#ff6a2f 45%,#e8543f 100%)}
+.btn-shine:hover{background-image:linear-gradient(135deg,#ff9a5e 0%,#ff7438 45%,#ee5c46 100%)}
+
+@media (prefers-reduced-motion:reduce){
+ .step-node svg path,.dock .step-dot.done svg path{animation:none;stroke-dashoffset:0}
+ .steps-flow .packet{display:none}
+ .tab-glider{transition:none}
+ .click-ripple{display:none}
+ .sandbox-chip::before{animation:none}
+ .magnetic{transition:none}
+}
+
+/* ---------- Gather-style intro loader + hero particle field ---------- */
+.intro-loader{position:fixed;inset:0;z-index:80;background:var(--background);transition:opacity .5s ease;pointer-events:none}
+.intro-loader.fade{opacity:0}
+.intro-loader canvas{position:absolute;inset:0;width:100%;height:100%}
+.hero-particles{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}

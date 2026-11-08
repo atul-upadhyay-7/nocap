@@ -1,12 +1,13 @@
 import React from 'react';
 import {Outlet,useLocation} from 'react-router-dom';
 import {Topbar,Dock} from './chrome.jsx';
-import {Ambient,Spotlight} from './ui.jsx';
+import {Ambient,Spotlight,IntroLoader} from './ui.jsx';
 export default function Layout(){
  const {pathname}=useLocation();
  return <div className="app">
   <Ambient/>
   <Spotlight/>
+  <IntroLoader/>
   <Topbar/>
   <Dock/>
   <main className="shell">
