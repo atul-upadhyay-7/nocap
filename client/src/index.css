@@ -524,3 +524,22 @@
 .intro-loader.fade{opacity:0}
 .intro-loader canvas{position:absolute;inset:0;width:100%;height:100%}
 .hero-particles{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+
+/* ============================================================
+   Wave 4 - cursor-reactive suite + capture celebration:
+   custom cursor dot+ring, 3D card tilt, scroll progress,
+   ember burst on paid, copy-chip morph.
+   ============================================================ */
+.cursor-dot{position:fixed;left:-2.5px;top:-2.5px;width:5px;height:5px;border-radius:50%;background:var(--ember);z-index:95;pointer-events:none;opacity:0;transition:opacity .3s}
+.cursor-ring{position:fixed;left:-15px;top:-15px;width:30px;height:30px;border-radius:50%;border:1.5px solid rgb(255 138 76 / .55);z-index:95;pointer-events:none;opacity:0;transition:opacity .3s,width .22s,height .22s,margin .22s,border-color .22s,background-color .22s}
+.cursor-ring.cursor-hot{width:44px;height:44px;margin:-7px 0 0 -7px;border-color:rgb(255 138 76 / .9);background:rgb(255 106 47 / .08)}
+@media (hover:none),(prefers-reduced-motion:reduce){.cursor-dot,.cursor-ring{display:none}}
+
+.tilt{height:100%;transition:transform .25s ease-out;transform-style:preserve-3d;will-change:transform}
+
+.scroll-progress{position:fixed;top:0;left:0;right:0;height:2px;z-index:70;transform-origin:0 50%;transform:scaleX(0);background:linear-gradient(90deg,var(--ember),#e85d75);pointer-events:none}
+
+.ember-burst{position:fixed;inset:0;width:100%;height:100%;z-index:75;pointer-events:none}
+
+.copy-chip{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--stroke);border-radius:999px;padding:3px 10px;background:transparent;cursor:pointer;font-family:var(--font-mono);font-size:10px;font-weight:500;letter-spacing:1px;text-transform:uppercase;color:var(--muted-foreground);transition:color .2s,border-color .2s}
+.copy-chip:hover{color:var(--foreground);border-color:var(--ember)}

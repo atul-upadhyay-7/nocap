@@ -2,7 +2,7 @@ import React from 'react';
 import {Link} from 'react-router-dom';
 import {Button} from '@/components/ui/button';
 import {Separator} from '@/components/ui/separator';
-import {Eyebrow,Reveal,SplitText,CountUp,Magnetic,HeroParticles} from '../ui.jsx';
+import {Eyebrow,Reveal,SplitText,CountUp,Magnetic,HeroParticles,Tilt} from '../ui.jsx';
 import {ArrowRight,ShieldCheck,FileSearch,BadgeDollarSign} from 'lucide-react';
 const STEPS=[
  ['Paste a synthetic brief','A practice client brief, never real work. The AI drafts a scope with evidence copied word for word from your text.'],
@@ -45,13 +45,15 @@ export default function Home(){
   </div>
   <Reveal delay={140} className="kpis mt-7">
    {KPIS.map((k,i)=>
-    <div key={i} className="kpi panel reveal" style={{'--reveal-delay':(140+i*90)+'ms'}}>
-     <div className="kpi-top">
-      <span className="kpi-icon"><k.icon size={17} strokeWidth={2.2}/></span>
+    <Tilt key={i}>
+     <div className="kpi panel reveal" style={{'--reveal-delay':(140+i*90)+'ms'}}>
+      <div className="kpi-top">
+       <span className="kpi-icon"><k.icon size={17} strokeWidth={2.2}/></span>
+      </div>
+      <span className="kpi-value">{k.prefix||''}<CountUp value={k.value} decimals={k.decimals}/>{k.suffix||''}</span>
+      <span className="kpi-label">{k.label}</span>
      </div>
-     <span className="kpi-value">{k.prefix||''}<CountUp value={k.value} decimals={k.decimals}/>{k.suffix||''}</span>
-     <span className="kpi-label">{k.label}</span>
-    </div>)}
+    </Tilt>)}
   </Reveal>
   <div className="mt-2">{STEPS.map(([title,text],i)=>
    <Reveal key={i} delay={240+i*90} className="grid grid-cols-[44px_1fr] gap-4 border-b py-6">

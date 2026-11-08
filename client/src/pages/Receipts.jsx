@@ -8,7 +8,17 @@ import {Dialog,DialogContent,DialogDescription,DialogHeader,DialogTitle} from '@
 import {Table,TableBody,TableCell,TableRow} from '@/components/ui/table';
 import {Textarea} from '@/components/ui/textarea';
 import {Label} from '@/components/ui/label';
-import {Check} from 'lucide-react';
+import {Check,Copy} from 'lucide-react';
+
+// Copy chip with a check morph (SmoothUI copy-button pattern).
+function CopyChip({value}){
+ const [copied,setCopied]=useState(false);
+ return <button type="button" className="copy-chip" aria-label="Copy order ID"
+  onClick={async()=>{try{await navigator.clipboard.writeText(value);setCopied(true);setTimeout(()=>setCopied(false),1500);}catch{}}}>
+  {copied?<Check size={12} strokeWidth={3}/>:<Copy size={12}/>}
+  {copied?'Copied':'Copy'}
+ </button>;
+}
 import ScopeGrid from '@/components/ScopeGrid.jsx';
 import {Tabs,TabsContent,TabsList,TabsTrigger} from '@/components/ui/tabs';
 const EVENT_LABELS={ORDER_CREATED:'Sandbox order created',ORDER_PENDING_REVIEW:'Capture unclear - held for review, never shown as paid',ORDER_COMPLETED:'Payment captured and verified server-side',WEBHOOK_CONFIRMED:'PayPal webhook verified and recorded',WEBHOOK_REJECTED:'A webhook failed verification and was ignored',WEBHOOK_IGNORED:'A verified webhook did not match any order',ORDER_REFUNDED:'Payment refunded in the sandbox, ledger reversed',ORDER_REFUND_FAILED:'Refund answer was unclear - the order stays completed and safe',ORDER_RECOVERED:'Order recovered into a later session with a one-time console code'};
@@ -187,7 +197,8 @@ export default function Receipts(){
   <Dialog open={!!selectedOrder} onOpenChange={open=>!open&&setSelectedOrder(null)}>
    {selectedOrder&&<DialogContent className="max-h-[85vh] overflow-y-auto">
     <DialogHeader>
-     <DialogTitle>Order {selectedOrder.orderId||'(creating)'}</DialogTitle>
+     <div className="flex items-center gap-2.5"><DialogTitle>Order {selectedOrder.orderId||'(creating)'}</DialogTitle>
+     {selectedOrder.orderId&&<CopyChip value={selectedOrder.orderId}/>}</div>
      <DialogDescription>Every step the server recorded for this sandbox order.</DialogDescription>
     </DialogHeader>
     <div className="space-y-4 text-sm">

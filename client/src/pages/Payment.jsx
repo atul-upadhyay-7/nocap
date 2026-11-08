@@ -1,7 +1,7 @@
 import React,{useState} from 'react';
 import {Link} from 'react-router-dom';
 import {useScopePay} from '../state.jsx';
-import {Eyebrow,Reveal,CountUp,HoldButton} from '../ui.jsx';
+import {Eyebrow,Reveal,CountUp,HoldButton,EmberBurst} from '../ui.jsx';
 import {CheckCircle2} from 'lucide-react';
 import {Button} from '@/components/ui/button';
 import {Card,CardContent,CardDescription,CardHeader,CardTitle} from '@/components/ui/card';
@@ -39,10 +39,10 @@ export default function Payment(){
     <Row label="Review"><span className="font-semibold text-ember-deep">Saved for scope {review.scopeId.slice(0,8)}...</span></Row>
     <Row label="Mode">PayPal sandbox. No real money.</Row>
     <div className="mt-5">
-     {paid?<div className="success-pop flex items-start gap-3 rounded-md border border-primary/40 bg-accent px-4 py-3.5">
+     {paid?<><EmberBurst/><div className="success-pop flex items-start gap-3 rounded-md border border-primary/40 bg-accent px-4 py-3.5">
        <span className="success-ring mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-ember text-primary-foreground"><CheckCircle2 size={13} strokeWidth={3}/></span>
        <p className="font-semibold text-ember-deep">Sandbox payment completed. Capture <span className="font-mono text-[13px]">{paid.captureId}</span>. See it on the Receipts page.</p>
-      </div>
+      </div></>
       :<HoldButton disabled={!ready} onFire={checkout}
         hint={ready?'Press and hold for one second to open PayPal sandbox checkout.':undefined}>
         {setupIssue?'Sandbox setup needed':checkoutClosed?'Checkout closed - reload to start again':ready?'Hold to pay with PayPal (sandbox)':'Preparing sandbox checkout...'}

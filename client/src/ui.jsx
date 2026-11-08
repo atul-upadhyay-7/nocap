@@ -51,6 +51,114 @@ export function Magnetic({children,className,strength=0.32}){
  return <span ref={ref} className={cn('magnetic',className)}>{children}</span>;
 }
 
+// Custom cursor accent (hover.dev / Skiper pattern, hand-built): a small ember
+// dot glued to the pointer plus a lagging ring that swells over interactive
+// elements. Native cursor stays visible. Desktop + motion-safe only.
+export function CursorFx(){
+ const dotRef=useRef(null),ringRef=useRef(null);
+ useEffect(()=>{
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  if(window.matchMedia('(hover: none)').matches)return;
+  const dot=dotRef.current,ring=ringRef.current;if(!dot||!ring)return;
+  let x=innerWidth/2,y=innerHeight/2,rx=x,ry=y,raf,seen=false;
+  function move(e){
+   x=e.clientX;y=e.clientY;
+   if(!seen){seen=true;dot.style.opacity='1';ring.style.opacity='1';rx=x;ry=y;}
+   const t=e.target&&e.target.closest?e.target.closest('a,button,[role=tab],[role=checkbox],[role=switch],input,textarea,select,label,.ag-row'):null;
+   ring.classList.toggle('cursor-hot',!!t);
+  }
+  function loop(){
+   rx+=(x-rx)*0.16;ry+=(y-ry)*0.16;
+   dot.style.transform=`translate(${x}px,${y}px)`;
+   ring.style.transform=`translate(${rx}px,${ry}px)`;
+   raf=requestAnimationFrame(loop);
+  }
+  window.addEventListener('mousemove',move,{passive:true});
+  raf=requestAnimationFrame(loop);
+  return ()=>{window.removeEventListener('mousemove',move);cancelAnimationFrame(raf);};
+ },[]);
+ return <>
+  <div ref={dotRef} className="cursor-dot" aria-hidden="true"/>
+  <div ref={ringRef} className="cursor-ring" aria-hidden="true"/>
+ </>;
+}
+
+// Subtle 3D tilt that follows the pointer across a card (max a few degrees).
+export function Tilt({children,className,max=5}){
+ const ref=useRef(null);
+ useEffect(()=>{
+  const el=ref.current;if(!el)return;
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  if(window.matchMedia('(hover: none)').matches)return;
+  function move(e){
+   const r=el.getBoundingClientRect();
+   const px=(e.clientX-r.left)/r.width-0.5,py=(e.clientY-r.top)/r.height-0.5;
+   el.style.transform=`perspective(700px) rotateX(${(-py*max).toFixed(2)}deg) rotateY(${(px*max).toFixed(2)}deg)`;
+  }
+  function leave(){el.style.transform='';}
+  el.addEventListener('mousemove',move);
+  el.addEventListener('mouseleave',leave);
+  return ()=>{el.removeEventListener('mousemove',move);el.removeEventListener('mouseleave',leave);};
+ },[max]);
+ return <div ref={ref} className={cn('tilt',className)}>{children}</div>;
+}
+
+// Thin ember scroll-progress bar pinned to the top of the viewport.
+export function ScrollProgress(){
+ const ref=useRef(null);
+ useEffect(()=>{
+  const el=ref.current;if(!el)return;
+  function onScroll(){
+   const h=document.documentElement;
+   const p=h.scrollTop/Math.max(1,h.scrollHeight-h.clientHeight);
+   el.style.transform=`scaleX(${p})`;
+  }
+  window.addEventListener('scroll',onScroll,{passive:true});
+  onScroll();
+  return ()=>window.removeEventListener('scroll',onScroll);
+ },[]);
+ return <div ref={ref} className="scroll-progress" aria-hidden="true"/>;
+}
+
+// Ember confetti burst for the moment a sandbox capture completes.
+export function EmberBurst({count=90}){
+ const ref=useRef(null);
+ useEffect(()=>{
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  const cv=ref.current;if(!cv)return;
+  const ctx=cv.getContext('2d');
+  const dpr=Math.min(2,window.devicePixelRatio||1);
+  const w=window.innerWidth,h=window.innerHeight;
+  cv.width=w*dpr;cv.height=h*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
+  let seed=(Date.now()%2147483647)||9;const rnd=()=>{seed=(seed*1103515245+12345)&0x7fffffff;return seed/0x7fffffff;};
+  const cx=w/2,cy=h*0.55;
+  const P=[];
+  for(let i=0;i<count;i++){
+   const a=-Math.PI/2+(rnd()-0.5)*2.2;
+   const sp=4+rnd()*9;
+   P.push({x:cx,y:cy,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,r:1.5+rnd()*2.5,life:1,decay:0.008+rnd()*0.012,rose:rnd()>0.78});
+  }
+  let raf;
+  function frame(){
+   ctx.clearRect(0,0,w,h);
+   let alive=false;
+   for(const p of P){
+    if(p.life<=0)continue;alive=true;
+    p.vy+=0.16;p.vx*=0.985;
+    p.x+=p.vx;p.y+=p.vy;p.life-=p.decay;
+    const a=Math.max(0,p.life);
+    ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,6.283);
+    ctx.fillStyle=p.rose?`rgba(232,93,117,${(a*0.9).toFixed(3)})`:`rgba(255,${Math.round(106+80*(1-a))},60,${(a*0.9).toFixed(3)})`;
+    ctx.fill();
+   }
+   if(alive)raf=requestAnimationFrame(frame);
+  }
+  raf=requestAnimationFrame(frame);
+  return ()=>cancelAnimationFrame(raf);
+ },[count]);
+ return <canvas ref={ref} className="ember-burst" aria-hidden="true"/>;
+}
+
 // Gather (gather.be-of-dao.com) style hero field, hand-built on canvas:
 // ember particles drift and gently gather toward the pointer. Reduced-motion
 // users get none of it (the static Ambient glow stays).
